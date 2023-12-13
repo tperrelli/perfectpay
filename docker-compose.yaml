@@ -1,0 +1,27 @@
+version: "3.8"
+
+services:
+  perfectdb:
+    image: mysql:8.0.33
+    command:
+      - "--default-authentication-plugin=mysql_native_password"
+    container_name: perfectpay-db
+    ports:
+      - 33060:3306
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - .dbdata:/var/lib/mysql
+  app:
+    image: ambientum/php:7.3-nginx
+    container_name: perfectpay-app
+    volumes:
+      - .:/var/www/app
+    ports:
+      - "88:8080"
+    links:
+      - perfectdb
+
+volumes:
+  dbdata: {}
